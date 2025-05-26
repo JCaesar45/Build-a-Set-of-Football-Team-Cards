@@ -1,0 +1,183 @@
+** start of index.html **
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>
+      Build a Set of Football Team Cards
+    </title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <h1 class="title">Team stats</h1>
+    <main>
+      <div class="team-stats">
+        <p>Team: <span id="team"></span></p>
+        <p>Year: <span id="year"></span></p>
+        <p>Head coach: <span id="head-coach"></span></p>
+      </div>
+      <label class="options-label" for="players">Filter Teammates:</label>
+      <select name="players" id="players">
+        <option value="all">All Players</option>
+        <option value="forward">Position Forward</option>
+        <option value="midfielder">Position Midfielder</option>
+        <option value="defender">Position Defender</option>
+        <option value="goalkeeper">Position Goalkeeper</option>
+      </select>
+      <div class="cards" id="player-cards"></div>
+    </main>
+    <footer>&copy; freeCodeCamp</footer>
+    <script src="./script.js"></script>
+  </body>
+</html>
+
+
+** end of index.html **
+
+** start of styles.css **
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --dark-grey: #0a0a23;
+  --light-grey: #f5f6f7;
+  --white: #ffffff;
+  --black: #000;
+}
+
+body {
+  background-color: var(--dark-grey);
+  text-align: center;
+  padding: 10px;
+}
+
+.title,
+.options-label,
+.team-stats,
+footer {
+  color: var(--white);
+}
+
+.title {
+  margin: 1.3rem 0;
+}
+
+.team-stats {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  font-size: 1.3rem;
+  margin: 1.2rem 0;
+}
+
+.options-label {
+  font-size: 1.2rem;
+}
+
+.cards {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+}
+
+.player-card {
+  background-color: var(--light-grey);
+  padding: 1.3rem;
+  margin: 1.2rem;
+  width: 300px;
+  border-radius: 15px;
+}
+
+@media (max-width: 768px) {
+  .team-stats {
+    flex-direction: column;
+  }
+}
+
+
+** end of styles.css **
+
+** start of script.js **
+
+// Define football team object
+const footballTeam = {
+  team: "Fort Wayne Falcons",
+  year: 2025,
+  headCoach: "Jordan Leturgez",
+  players: [
+    {
+      name: "Alex Griffin",
+      position: "forward",
+      isCaptain: false,
+    },
+    {
+      name: "Marcus Trent",
+      position: "midfielder",
+      isCaptain: true,
+    },
+    {
+      name: "Darren Cole",
+      position: "defender",
+      isCaptain: false,
+    },
+    {
+      name: "Leo Carter",
+      position: "goalkeeper",
+      isCaptain: false,
+    }
+  ]
+};
+
+// Display team information
+document.getElementById("team").textContent = footballTeam.team;
+document.getElementById("year").textContent = footballTeam.year;
+document.getElementById("head-coach").textContent = footballTeam.headCoach;
+
+// Function to render player cards
+function displayPlayers(positionFilter) {
+  const playerCardsContainer = document.getElementById("player-cards");
+  playerCardsContainer.innerHTML = ""; // Clear previous cards
+
+  const filteredPlayers = footballTeam.players.filter(player => {
+    return positionFilter === "all" || player.position === positionFilter;
+  });
+
+  filteredPlayers.forEach(player => {
+    const card = document.createElement("div");
+    card.classList.add("player-card");
+
+    const nameElement = document.createElement("h2");
+    nameElement.textContent = player.isCaptain ? `(Captain) ${player.name}` : player.name;
+
+    const positionElement = document.createElement("p");
+    positionElement.textContent = `Position: ${player.position}`;
+
+    card.appendChild(nameElement);
+    card.appendChild(positionElement);
+    playerCardsContainer.appendChild(card);
+  });
+}
+
+// Initial display
+displayPlayers("all");
+
+// Add dropdown listener
+document.getElementById("players").addEventListener("change", (e) => {
+  const selected = e.target.value;
+  const position = selected === "all" ? "all" : selected.split(" ")[1] || selected; // handles "Position Midfielder"
+  displayPlayers(position);
+});
+
+
+** end of script.js **
+
